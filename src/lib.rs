@@ -35,6 +35,53 @@
 //! # }
 //! ```
 
+// =========================================================================
+// RUST LINT CONFIGURATION: bincode-next -- virtue
+// =========================================================================
+
+// -------------------------------------------------------------------------
+// LEVEL 1: CRITICAL ERRORS (Deny)
+// -------------------------------------------------------------------------
+#![deny(
+    // Rust Compiler Errors
+    dead_code,
+    unreachable_code,
+    improper_ctypes_definitions,
+    future_incompatible,
+    nonstandard_style,
+    rust_2018_idioms,
+    clippy::perf,
+    clippy::correctness,
+    clippy::suspicious,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing,
+    clippy::arithmetic_side_effects,
+    clippy::missing_safety_doc,
+    clippy::same_item_push,
+    clippy::implicit_clone,
+    clippy::all,
+    clippy::pedantic,
+    warnings,
+    missing_docs,
+    clippy::nursery,
+    clippy::single_call_fn,
+)]
+// -------------------------------------------------------------------------
+// LEVEL 2: STYLE WARNINGS (Warn)
+// -------------------------------------------------------------------------
+#![warn(clippy::dbg_macro, clippy::todo, clippy::unnecessary_safety_comment)]
+// -------------------------------------------------------------------------
+// LEVEL 3: ALLOW/IGNORABLE (Allow)
+// -------------------------------------------------------------------------
+#![allow(
+    unsafe_code,
+    clippy::restriction,
+    clippy::inline_always,
+    unused_doc_comments,
+    clippy::empty_line_after_doc_comments
+)]
+
 use core::{any::TypeId, marker::PhantomData, mem};
 
 /// Untypes your types. For documentation see the root of this crate.
@@ -42,6 +89,10 @@ use core::{any::TypeId, marker::PhantomData, mem};
 /// # Safety
 ///
 /// This should not be used with types with lifetimes.
+///
+/// # Errors
+///
+/// Returns an error with Result type if the types are not equal.
 pub unsafe fn unty<Src, Target: 'static>(x: Src) -> Result<Target, Src> {
     if type_equal::<Src, Target>() {
         let x = mem::ManuallyDrop::new(x);
@@ -75,6 +126,7 @@ pub unsafe fn unty<Src, Target: 'static>(x: Src) -> Result<Target, Src> {
 /// # }
 /// # foo("", "");
 /// ```
+#[must_use]
 pub fn type_equal<Src: ?Sized, Target: ?Sized>() -> bool {
     non_static_type_id::<Src>() == non_static_type_id::<Target>()
 }
