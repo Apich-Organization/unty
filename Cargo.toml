@@ -1,9 +1,12 @@
 [package]
-name = "unty"
-version = "0.0.5"
+name = "unty-next"
+version = "0.0.6"
 edition = "2021"
 description = "Explicitly types your generics"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/bincode-org/unty"
-authors = []
+repository = "https://github.com/Apich-Organization/unty"
+authors = [
+    "Xinyu Yang <pana.yang@hotmail.com>",
+    "The bincode-next & bincode developers",
+]
 rust-version = "1.56.1"
