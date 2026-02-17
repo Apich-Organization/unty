@@ -94,11 +94,13 @@ use core::{any::TypeId, marker::PhantomData, mem};
 ///
 /// Returns an error with Result type if the types are not equal.
 pub unsafe fn unty<Src, Target: 'static>(x: Src) -> Result<Target, Src> {
-    if type_equal::<Src, Target>() {
-        let x = mem::ManuallyDrop::new(x);
-        Ok(mem::transmute_copy::<Src, Target>(&x))
-    } else {
-        Err(x)
+    unsafe {
+        if type_equal::<Src, Target>() {
+            let x = mem::ManuallyDrop::new(x);
+            Ok(mem::transmute_copy::<Src, Target>(&x))
+        } else {
+            Err(x)
+        }
     }
 }
 
